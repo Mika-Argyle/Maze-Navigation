@@ -2,7 +2,7 @@
 #By:
 #Mika Argyle - 101043314
 #and
-#
+#Muhammad Maahir Abdul Aziz - 101244916
 
 from collections import deque
 import heapq
@@ -33,16 +33,82 @@ class SearchAgent:
             temp_grid[row][col] = 'P'
         for row in temp_grid:
             print(" ".join(row))
+
     def bfs(self):
+        exploration_steps = 0  #keeps count of how many nodes explored
+        fringe = deque([self.start])  #a queue to explore nodes level by level as it is BFS/Breadth First
+        visited = set()  #tracks visited nodes to avoid revisiting
+        previous_node = {self.start: None}  #tracks how we reached there
 
-        return None
+        while fringe:  #as long as there are nodes to explore, we are in the while loop
+            exploration_steps += 1  
+            current_node = fringe.popleft()  #remove the first node in the queue
+
+            if current_node == self.goal:
+                path = []  #if we reach the goal then path stored
+                while current_node:  #trace backward path
+                    path.append(current_node)
+                    current_node = previous_node[current_node]
+                path.reverse()  #reverse to get the path from start to goal
+                self.print_path(path)
+                #return path length, steps taken, and total cost of the path
+                return len(path), exploration_steps, sum(self.get_cost(node) for node in path)
+
+            #if the current node is not visited then we mark it as visited and get the row and column of the node
+            if current_node not in visited:
+                visited.add(current_node)  
+                row, col = current_node  
+
+                #we add all valid neighbors from all directions to the queue
+                for r, c in [(row-1, col), (row+1, col), (row, col-1), (row, col+1)]:
+                    neighbor = (r, c) 
+                    if self.is_valid(neighbor) and neighbor not in visited:  
+                        fringe.append(neighbor)  #valid unvisited neighbour added to the queue
+                        if neighbor not in previous_node:  #records the path to this neighbor
+                            previous_node[neighbor] = current_node
+
+        return None  #if no path to the goal is found
+
 # Implement BFS logic: return exploration steps, path cost, and path length, or None if no path is found. 
-# To be implemented by group member
-    def dfs(self):
+# BFS implemented by group member: Muhammad Maahir Abdul Aziz
 
-        return None
+    def dfs(self):
+        #I have not commented on any lines of code repeated from BFS code logic
+        #the key difference between BFS and DFS is that BFS uses a queue (FIFO) and DFS uses a stack (LIFO)
+        exploration_steps = 0  
+        fringe = [self.start]  #we use a stack to explore nodes as LIFO
+        visited = set()  
+        previous_node = {self.start: None}  
+
+        while fringe:  
+            exploration_steps += 1  
+            current_node = fringe.pop()  #removes the last node in the stack
+
+            if current_node == self.goal:
+                path = []  
+                while current_node:  
+                    path.append(current_node)
+                    current_node = previous_node[current_node]
+                path.reverse() 
+                self.print_path(path) 
+                return len(path), exploration_steps, sum(self.get_cost(node) for node in path)
+
+            if current_node not in visited:
+                visited.add(current_node)  
+                row, col = current_node  
+
+                for r, c in [(row-1, col), (row+1, col), (row, col-1), (row, col+1)]:
+                    neighbor = (r, c)  
+                    if self.is_valid(neighbor) and neighbor not in visited: 
+                        fringe.append(neighbor)  #add it to the stack
+                        if neighbor not in previous_node: 
+                            previous_node[neighbor] = current_node
+
+        return None 
+
 # Implement DFS logic: return exploration steps, path cost, and path length, or None if no path is found.
-# To be implemented by group member
+# DFS implemented by Muhammad Maahir Abdul Aziz
+
     def ucs(self):
 # Implement UCS logic: return exploration steps, path cost, and path length, or None if no path is found.
 # Orders by path cost (backwards cost) - most basic algorithm that factors in cost
@@ -182,7 +248,7 @@ class SearchAgent:
 # Implement A* logic: return exploration steps, path cost, and path length, or None if no path is found.
 def test_search_agent(agent):
     results = {}
-    '''print("\n--- BFS ---")
+    print("\n--- BFS ---")
     path_length, exploration_steps, cost_length = agent.bfs()
     results['BFS'] = (path_length, exploration_steps, cost_length)
     print(f"Path Length: {path_length} steps")
@@ -193,7 +259,7 @@ def test_search_agent(agent):
     results['DFS'] = (path_length, exploration_steps, cost_length)
     print(f"Path Length: {path_length} steps")
     print(f"Exploration Steps: {exploration_steps}")
-    print(f"Cost Length: {cost_length}")'''
+    print(f"Cost Length: {cost_length}")
     print("\n--- UCS ---")
     path_length, exploration_steps, cost_length = agent.ucs()
     results['UCS'] = (path_length, exploration_steps, cost_length)
