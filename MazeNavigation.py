@@ -275,6 +275,21 @@ def test_search_agent(agent):
     print(f"Cost Length: {cost_length}")
     return results
 
+#This is a grid to show difference between DFS and BFS
+
+grid = [
+    ['S', '.', '.', '.', '.'],
+    ['.', '#', '.', '#', '.'],
+    ['.', '.', 'G', '.', '.'],
+    ['.', '#', '.', '#', '.'],
+    ['.', '.', '.', '.', '.']
+]
+start = (0,0) #Start pos
+goal = (2,2) #Goal pos
+
+# Creates an instance of a search agent
+agent1 = SearchAgent(start,goal,grid)
+
 # This is a good grid for testing UCS benefits
 grid = [
     ['S', 'F', 'F', 'F', 'F'],
@@ -283,11 +298,12 @@ grid = [
     ['.', '#', '.', '#', '.'],
     ['.', '.', '.', '#', 'G']
 ]
-start = (0, 0)  # Starting position
-goal = (4, 4)   # Goal position
+start = (0, 0)  
+goal = (4, 4)   
 
-agent1 = SearchAgent(start, goal, grid)
+agent2 = SearchAgent(start, goal, grid)
 
+# This is a grid for showing benefits of A*
 grid = [
     ['S', '.', '.', 'f', '.', '.', '.'],
     ['#', '#', '#', '#', '#', '#', 'f'],
@@ -299,14 +315,12 @@ grid = [
 start = (0,0)
 goal = (5,6)
 
+agent3 = SearchAgent(start, goal, grid)
 
-# Creates an instance of a search agent
-agent2 = SearchAgent(start, goal, grid)
-
-#Tests the search agent
+#Tests the search agents/mazes
 print("\n\nTESTING MAZE ONE")
 test_search_agent(agent1)
 print("\n\nTESTING MAZE TWO")
 test_search_agent(agent2)
-
-#Does it work ? 
+print("\n\nTESTING MAZE THREE")
+test_search_agent(agent3)
